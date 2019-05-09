@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load post_tags %}
+{% load user_tags %}
+{% load resource_tags %}
+
+
+{% block title %}
+    首页
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-9">
+            {% get_all_posts as posts %}
+            {% include 'posts/list.html' with posts=posts %}
+            {% include 'posts/list.html' with posts=posts %}
+
+        </div>
+        <div class="col-md-3">
+            <h6 class="border-bottom border-gray pb-2">最新加入</h6>
+            {% get_recent_users as online_users %}
+            {% include 'users/list.html' with users=online_users %}
+            <small class="d-block text-right mt-2">
+              <a href="{% url 'users:user-list' %}">全部用户</a>
+            </small>
+
+            <h6 class="border-bottom border-gray pb-2 mt-3">热门文件</h6>
+            {% get_hot_resources as resources %}
+            {% include 'resources/hot-list.html' with resources=resources %}
+
+            <small class="d-block text-right mt-2">
+              <a href="{% url 'resources:resource-list' %}">全部文件</a>
+            </small>
+
+            <h6 class="border-bottom border-gray pb-2 mt-3">热门帖子</h6>
+            {% get_hot_posts as hot_posts %}
+            {% include 'posts/hot-list.html' with posts=hot_posts %}
+
+
+        </div>
+    </div>
+
+{% endblock %}

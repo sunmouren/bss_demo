@@ -1,0 +1,24 @@
+
+
+<li class="list-group-item mt-1 border-0">
+    <div class="resource-{{ resource.id }}">
+        <div class="d-flex justify-content-between small">
+            <span><strong>{{ resource.title }}</strong></span>
+        </div>
+        <div class="small mt-1">
+            <span class="text-muted card-link">
+               下载次数: <span id="download-count">{{ resource.download_count }}</span>
+            </span>
+            {% if request.user.is_authenticated %}
+                <span class="card-link text-muted">
+                    <a href="{{ resource.src.url }}" download="" data-rid="{{ resource.id }}"
+                       class="badge badge-light text-success download">下载</a>
+                </span>
+            {% else %}
+                <span class="card-link text-muted">
+                    <a href="{% url 'users:user-login' %}" class="badge badge-light text-info">登录后可下载</a>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+</li>

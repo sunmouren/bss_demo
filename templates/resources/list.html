@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load resource_tags %}
+
+{% block title %}
+    资源文件列表
+{% endblock %}
+
+
+{% block content %}
+    <div class="row mb-5">
+        <div class="col-md-9">
+            <h6 class="border-bottom border-gray pb-2">最新资源文件</h6>
+            <div class="list-group list-group-flush">
+                {% for resource in object_list %}
+                    {% include 'resources/item.html' with resource=resource %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <h6 class="border-bottom border-gray pb-2">上传资源文件</h6>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'resources:upload-resource' %}" role="button" class="btn btn-sm btn-outline-info btn-block mt-3">
+                  <i class="fa fa-upload"></i> 上传文件
+                </a>
+            {% else %}
+                <a href="{% url 'users:user-login' %}" role="button" class="btn btn-sm btn-outline-info btn-block mt-3">
+                   请先登录
+                </a>
+            {% endif %}
+            <h6 class="border-bottom border-gray pb-2 mt-3">热门资源文件</h6>
+            <div class="list-group list-group-flush">
+                {% get_hot_resources 10 as hot_resources %}
+                {% for resource in hot_resources %}
+                    {% include 'resources/hot-item.html' with resource=resource %}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+        $('a.download').click(function () {
+            var rid = $(this).data('rid');
+            var data = {
+                'rid': rid
+            };
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '/resource/add/count/',
+                data: data,
+                async: true,
+                success: function (response) {
+                    location.reload();
+                }
+            });
+        });
+    </script>
+{% endblock %}
